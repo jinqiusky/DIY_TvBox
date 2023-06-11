@@ -31,6 +31,7 @@ import com.github.tvbox.osc.util.HawkConfig;
 import com.github.tvbox.osc.util.PlayerHelper;
 import com.github.tvbox.osc.util.ScreenUtils;
 import com.github.tvbox.osc.util.SubtitleHelper;
+import com.github.tvbox.osc.ui.activity.DetailActivity;
 import com.orhanobut.hawk.Hawk;
 import com.owen.tvrecyclerview.widget.TvRecyclerView;
 import com.owen.tvrecyclerview.widget.V7LinearLayoutManager;
@@ -119,6 +120,7 @@ public class VodController extends BaseController {
     TextView mPlayerIJKBtn;
     TextView mPlayerRetry;
     TextView mPlayrefresh;
+    TextView mBack;
     //TextView finishAt;
     
     public TextView mPlayerTimeStartEndText;
@@ -197,6 +199,7 @@ public class VodController extends BaseController {
         mZimuBtn = findViewById(R.id.zimu_select);
         mAudioTrackBtn = findViewById(R.id.audio_track_select);
         mLandscapePortraitBtn = findViewById(R.id.landscape_portrait);
+        mBack = findViewById(R.id.tvBackButton);
         //finishAt = findViewById(R.id.tv_finish_at);
         initSubtitleInfo();
 
@@ -274,6 +277,23 @@ public class VodController extends BaseController {
                 hideBottom();
             }
         });
+//添加返回detail activity
+        mBack.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean showPreview = Hawk.get(HawkConfig.SHOW_PREVIEW, true);
+                if (showPreview) {
+                    mTopRoot1.setVisibility(GONE);
+                    mTopRoot2.setVisibility(GONE);                
+                    mBottomRoot.setVisibility(GONE);
+                    //mBack.setVisibility(GONE);
+                    myHandle.removeCallbacks(myRunnable);
+                    ((DetailActivity) mActivity).toggleFullPreview();
+                } else {
+                    mActivity.finish();
+                }
+            }
+        });        
         mPlayrefresh.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -374,7 +394,7 @@ public class VodController extends BaseController {
                     updatePlayerCfgView();
                     listener.updatePlayerCfg();
                     listener.replay(false);
-//                    hideBottom();
+                    hideBottom();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -413,7 +433,7 @@ public class VodController extends BaseController {
                                     updatePlayerCfgView();
                                     listener.updatePlayerCfg();
                                     listener.replay(false);
-//                                    hideBottom();
+                                    hideBottom();
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -467,7 +487,7 @@ public class VodController extends BaseController {
                     updatePlayerCfgView();
                     listener.updatePlayerCfg();
                     listener.replay(false);
-//                    hideBottom();
+                    hideBottom();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -492,15 +512,15 @@ public class VodController extends BaseController {
             }
         });
         
-//        增加播放页面片头片尾时间重置,长按 1:30
+//      增加播放页面片头片尾时间重置,长按跳过 2:00 
         mPlayerTimeResetBtn.setOnLongClickListener(new OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
                // myHandle.removeCallbacks(myRunnable);
                // myHandle.postDelayed(myRunnable, myHandleSeconds);
                 try {
-                    mPlayerConfig.put("et", 90);
-                    mPlayerConfig.put("st", 90);
+                    mPlayerConfig.put("et", 120);
+                    mPlayerConfig.put("st", 120);
                     updatePlayerCfgView();
                     listener.updatePlayerCfg();
                 } catch (JSONException e) {

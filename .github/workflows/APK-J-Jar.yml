@@ -1,4 +1,4 @@
-name: APK-T Build
+name: APK-J-Jar Build
 
 on:
 #  push:
@@ -15,11 +15,11 @@ jobs:
         with:
           fetch-depth: 0
       - name: Clone Project
-        run: git clone -b main --depth=1 https://github.com/zhoujck/takagen99.git
+        run: git clone -b main --depth=1 https://github.com/zhoujck/TVBoxOS
       - name: DIY
         run: |
-          chmod +x diy-T.sh
-          bash ${{ github.workspace }}/diy-T.sh
+          chmod +x diy-J-Jar.sh
+          bash ${{ github.workspace }}/diy-J-Jar.sh
       - name: Build With Gradle
         run: |
           num=$(find ${{ github.workspace }} -name gradlew  | awk -F"/" '{print NF-1}')
@@ -36,5 +36,5 @@ jobs:
       - name: Upload App To Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: 糖果tv
+          name: 糖果
           path: ${{ github.workspace }}/apk/*
